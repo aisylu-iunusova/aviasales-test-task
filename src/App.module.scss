@@ -1,0 +1,13 @@
+.App {
+  display: flex;
+  flex-direction: column;
+
+  max-width: 960px;
+  padding: 0 103px;
+
+  .page {
+    display: grid;
+    grid-template-columns: 232px auto;
+    gap: 20px;
+  }
+}

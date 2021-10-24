@@ -1,8 +1,22 @@
 import React from "react";
-import "./App.css";
+import styles from "./App.module.scss";
+import Header from "./components/Header";
+import Filter from "./components/Filter";
 
-function App() {
-  return <div className="App"></div>;
-}
+const App = () => {
+  return (
+    <div className={styles.App}>
+      <div className={styles.header}>
+        <Header />
+      </div>
+      <div className={styles.page}>
+        <div className={styles.sidebar}>
+          <Filter />
+        </div>
+        <div className={styles.main}></div>
+      </div>
+    </div>
+  );
+};
 
 export default App;
