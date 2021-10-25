@@ -1,8 +1,14 @@
 import React from "react";
 import styles from "./index.module.scss";
 
-const Header = () => {
-  return <div className={styles.header}></div>;
+const Button = () => {
+  return (
+    <div className={styles.button}>
+      <button className={styles.button} type="button">
+        Показать еще 5 билетов!
+      </button>
+    </div>
+  );
 };
 
-export default Header;
+export default Button;

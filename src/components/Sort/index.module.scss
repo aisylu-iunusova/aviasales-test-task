@@ -1,0 +1,48 @@
+@import "../../variables";
+
+.sort {
+  background-color: $background-content;
+  border: 1px solid $border-color;
+  border-radius: 5px;
+  overflow: hidden;
+
+  .form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .option {
+    display: flex;
+    justify-content: center;
+
+    & + .option {
+      border-left: 1px solid $border-color;
+    }
+  }
+
+  input {
+    display: none;
+  }
+
+  label {
+    display: inline-block;
+    text-align: center;
+    padding: 15px;
+    width: 100%;
+
+    font-family: Open Sans;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 1.7;
+    letter-spacing: 0.5;
+    text-transform: uppercase;
+
+    color: $text-color;
+  }
+
+  .active {
+    color: $background-content;
+    background-color: $border-color-checkbox-active;
+    border: 1px solid $border-color-checkbox-active;
+  }
+}
