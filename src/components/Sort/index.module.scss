@@ -2,9 +2,8 @@
 
 .sort {
   background-color: $background-content;
-  border: 1px solid $border-color;
-  border-radius: 5px;
   overflow: hidden;
+  border-radius: 5px;
 
   .form {
     display: grid;
@@ -13,9 +12,34 @@
   .option {
     display: flex;
     justify-content: center;
+    border: 1px solid $border-color;
+
+    &:first-child {
+      border-radius: 5px 0 0 5px;
+    }
+
+    &:last-child {
+      border-radius: 0 5px 5px 0;
+    }
 
     & + .option {
-      border-left: 1px solid $border-color;
+      border-left: 0;
+    }
+
+    &:hover {
+      border-color: $border-color-checkbox-active;
+
+      label {
+        color: $border-color-checkbox-active;
+      }
+    }
+  }
+  .active {
+    background-color: $border-color-checkbox-active;
+    border: 0;
+
+    label {
+      color: $background-content;
     }
   }
 
@@ -38,11 +62,5 @@
     text-transform: uppercase;
 
     color: $text-color;
-  }
-
-  .active {
-    color: $background-content;
-    background-color: $border-color-checkbox-active;
-    border: 1px solid $border-color-checkbox-active;
   }
 }

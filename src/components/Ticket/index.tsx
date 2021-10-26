@@ -1,12 +1,13 @@
 import React from "react";
 import styles from "./index.module.scss";
+import s7 from "../../assets/s7.png";
 
 const Ticket = () => {
   return (
     <div className={styles.ticket}>
       <div className={styles.ticketHeader}>
         <div className={styles.price}>13 400 р</div>
-        <img src="" alt="Airlines" />
+        <img src={s7} alt="Airlines" />
       </div>
       <div className={styles.ticketDetails}>
         <div className={styles.row}>
