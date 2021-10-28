@@ -9,38 +9,24 @@
     display: grid;
     grid-template-columns: repeat(3, 1fr);
   }
+
   .option {
     display: flex;
     justify-content: center;
-    border: 1px solid $border-color;
 
-    &:first-child {
+    &:first-child label {
       border-radius: 5px 0 0 5px;
     }
 
-    &:last-child {
+    &:last-child label {
       border-radius: 0 5px 5px 0;
     }
-
-    & + .option {
-      border-left: 0;
-    }
-
-    &:hover {
-      border-color: $border-color-checkbox-active;
-
-      label {
-        color: $border-color-checkbox-active;
-      }
-    }
-  }
-  .active {
   }
 
   input {
     display: none;
 
-    &:checked + label {
+    &:checked ~ label {
       background-color: $border-color-checkbox-active;
       border: 0;
       color: $background-content;
@@ -52,6 +38,7 @@
     text-align: center;
     padding: 15px;
     width: 100%;
+    cursor: pointer;
 
     font-family: Open Sans;
     font-style: normal;
@@ -62,5 +49,15 @@
     text-transform: uppercase;
 
     color: $text-color;
+
+    border: 1px solid $border-color;
+    & + label {
+      border-left: 0;
+    }
+
+    &:hover {
+      border-color: $border-color-checkbox-active;
+      color: $border-color-checkbox-active;
+    }
   }
 }

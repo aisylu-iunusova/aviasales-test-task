@@ -15,8 +15,8 @@ const Sort = ({ onChange }: Props) => {
             type="radio"
             id="cheapest"
             value="cheapest"
-            // checked
             onChange={onChange}
+            defaultChecked
           />
           <label htmlFor="cheapest">Самый дешевый</label>
         </div>

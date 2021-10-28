@@ -5,22 +5,36 @@ import Filter from "./components/Filter";
 import Sort from "./components/Sort";
 import Button from "./components/Button";
 import Ticket from "./components/Ticket";
-import { PropsTicket, Segments } from "./components/Ticket";
+import { PropsTicket } from "./components/Ticket";
 
 const CURRENT_COUNT: number = 5;
+
+const sortCheapest = (arr: PropsTicket[]) => {
+  for (let i = 0; i < arr.length - 1; i++) {
+    let min = i;
+    for (let j = i + 1; j < arr.length; j++) {
+      if (arr[min].price > arr[j].price) {
+        min = j;
+      }
+    }
+    if (min !== i) {
+      let k = arr[min];
+      arr[min] = arr[i];
+      arr[i] = k;
+    }
+  }
+  return arr;
+};
 
 const App = () => {
   const [tickets, setTickets] = useState<PropsTicket[]>([]);
   const [currentTickets, setCurrentTickets] = useState<PropsTicket[]>([]);
 
   const getCurrentTickets = () => {
-    // console.log(tickets.slice(0, CURRENT_COUNT));
-
     let beginIndex = currentTickets.length;
     let endIndex = beginIndex + CURRENT_COUNT;
     let moreTickets = tickets.slice(beginIndex, endIndex);
     setCurrentTickets([...currentTickets, ...moreTickets]);
-    // console.log(currentTickets);
   };
 
   const showMoreTickets = () => {
@@ -38,37 +52,20 @@ const App = () => {
           .then((data) => {
             if (data.tickets) {
               setTickets(data.tickets);
-              setCurrentTickets(data.tickets.slice(0, CURRENT_COUNT));
+              let sortCurrentTickets = sortCheapest(
+                data.tickets.slice(0, CURRENT_COUNT)
+              );
+              setCurrentTickets(sortCurrentTickets);
             }
-
-            // console.log(data);
           })
           .catch((err) => {
             console.log("Error get tickets");
           });
-        // console.log(searchId);
       })
       .catch((err) => {
         console.log("Error get searchId");
       });
   }, []);
-
-  const sortCheapest = () => {
-    for (let i = 0; i < currentTickets.length - 1; i++) {
-      let min = i;
-      for (let j = i + 1; j < currentTickets.length; j++) {
-        if (currentTickets[min].price > currentTickets[j].price) {
-          min = j;
-        }
-      }
-      if (min !== i) {
-        let k = currentTickets[min];
-        currentTickets[min] = currentTickets[i];
-        currentTickets[i] = k;
-      }
-    }
-    return setCurrentTickets([...currentTickets]);
-  };
 
   const sortFastest = () => {
     for (let i = 0; i < currentTickets.length - 1; i++) {
@@ -77,8 +74,6 @@ const App = () => {
         if (
           currentTickets[min].segments[0].duration >
           currentTickets[j].segments[0].duration
-          // currentTickets[min].segments[1].duration >
-          //   currentTickets[j].segments[1].duration
         ) {
           min = j;
         }
@@ -94,8 +89,14 @@ const App = () => {
 
   const sortTickets = (e: React.ChangeEvent<HTMLInputElement>) => {
     console.log(e.target.value);
-    if (e.target.value === "fastest") sortFastest();
-    if (e.target.value === "cheapest") sortCheapest();
+
+    if (e.target.value === "fastest") {
+      sortFastest();
+    }
+    if (e.target.value === "cheapest") {
+      let sortCurrentTickets = sortCheapest(currentTickets);
+      setCurrentTickets([...sortCurrentTickets]);
+    }
   };
 
   return (

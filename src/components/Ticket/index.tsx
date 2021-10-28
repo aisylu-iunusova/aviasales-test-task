@@ -16,7 +16,7 @@ export type PropsTicket = {
   segments: Segments[];
 };
 
-const Ticket = ({ price, segments }: PropsTicket) => {
+const Ticket = ({ price, segments, carrier }: PropsTicket) => {
   const getTimeFromMins = (mins: number) => {
     let hours = Math.trunc(mins / 60);
     let minutes = mins % 60;
@@ -47,7 +47,7 @@ const Ticket = ({ price, segments }: PropsTicket) => {
     <div className={styles.ticket}>
       <div className={styles.ticketHeader}>
         <div className={styles.price}>{`${price} p`}</div>
-        <img src={s7} alt="Airlines" />
+        <img src={`//pics.avs.io/99/36/${carrier}.png`} alt="Airlines" />
       </div>
       <div className={styles.ticketDetails}>
         {segments.map(
