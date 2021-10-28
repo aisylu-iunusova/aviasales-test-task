@@ -35,16 +35,16 @@
     }
   }
   .active {
-    background-color: $border-color-checkbox-active;
-    border: 0;
-
-    label {
-      color: $background-content;
-    }
   }
 
   input {
     display: none;
+
+    &:checked + label {
+      background-color: $border-color-checkbox-active;
+      border: 0;
+      color: $background-content;
+    }
   }
 
   label {

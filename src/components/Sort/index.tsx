@@ -1,22 +1,45 @@
 import React from "react";
 import styles from "./index.module.scss";
 
-const Sort = () => {
+type Props = {
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
+
+const Sort = ({ onChange }: Props) => {
   return (
     <div className={styles.sort}>
       <form className={styles.form}>
-        <div className={`${styles.option} ${styles.active}`}>
-          <input type="radio" id="cheapest"></input>
+        <div className={styles.option}>
+          <input
+            name="sort"
+            type="radio"
+            id="cheapest"
+            value="cheapest"
+            // checked
+            onChange={onChange}
+          />
           <label htmlFor="cheapest">Самый дешевый</label>
         </div>
         <div className={styles.option}>
-          <input type="radio" id="fastest"></input>
+          <input
+            name="sort"
+            type="radio"
+            id="fastest"
+            value="fastest"
+            onChange={onChange}
+          />
           <label className={styles.fastest} htmlFor="fastest">
             Самый быстрый
           </label>
         </div>
-        <div className={`${styles.option} ${styles.active}`}>
-          <input type="radio" id="optimal"></input>
+        <div className={styles.option}>
+          <input
+            name="sort"
+            type="radio"
+            id="optimal"
+            value="optimal"
+            onChange={onChange}
+          />
           <label htmlFor="optimal">Оптимальный</label>
         </div>
       </form>

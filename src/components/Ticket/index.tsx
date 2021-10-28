@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./index.module.scss";
 import s7 from "../../assets/s7.png";
 
-type Segments = {
+export type Segments = {
   origin: string;
   destination: string;
   date: string;
@@ -17,44 +17,57 @@ export type PropsTicket = {
 };
 
 const Ticket = ({ price, segments }: PropsTicket) => {
-  console.log(origin);
+  const getTimeFromMins = (mins: number) => {
+    let hours = Math.trunc(mins / 60);
+    let minutes = mins % 60;
+    return `${hours}ч ${minutes}м`;
+  };
+
+  const countStops = (length: number) => {
+    if (length === 1) {
+      return <div>{length} пересадка</div>;
+    } else if (length > 1) {
+      return <div>{length} пересадки</div>;
+    } else {
+      return <div>Без пересадок</div>;
+    }
+  };
+
+  const calculateFlyTime = ({ date, duration }: any) => {
+    let beginTime = new Date(date);
+    let endTime = new Date(date);
+    endTime.setMinutes(endTime.getMinutes() + duration);
+    let start = `${beginTime.getHours()}:${beginTime.getMinutes()}`;
+    let finish = `${endTime.getHours()}:${endTime.getMinutes()}`;
+
+    return `${start} - ${finish}`;
+  };
 
   return (
     <div className={styles.ticket}>
       <div className={styles.ticketHeader}>
-        <div className={styles.price}>{price}</div>
-        {/* <img src={s7} alt="Airlines" /> */}
+        <div className={styles.price}>{`${price} p`}</div>
+        <img src={s7} alt="Airlines" />
       </div>
       <div className={styles.ticketDetails}>
-        {segments.map(({ origin, destination, date, duration }, index) => (
-          <div className={styles.row} key={index}>
-            <div className={styles.column}>
-              <div>{`${origin} - ${destination}`}</div>
-              <div>{date}</div>
+        {segments.map(
+          ({ origin, destination, date, duration, stops }, index) => (
+            <div className={styles.row} key={index}>
+              <div className={styles.column}>
+                <div>{`${origin} - ${destination}`}</div>
+                <div>{calculateFlyTime({ date, duration })}</div>
+              </div>
+              <div className={styles.column}>
+                <div>В пути</div>
+                <div>{getTimeFromMins(duration)}</div>
+              </div>
+              <div className={styles.column}>
+                {countStops(stops.length)}
+                <div>{stops.join(", ")}</div>
+              </div>
             </div>
-            <div className={styles.column}>
-              <div>В пути</div>
-              <div>{duration}</div>
-            </div>
-            <div className={styles.column}>
-              <div>2 пересадки</div>
-              {/* <div>{stops}</div> */}
-            </div>
-          </div>
-        ))}
-        {/* <div className={styles.row}>
-          <div className={styles.column}>
-            <div>{`${origin} - ${destination}`}</div>
-            <div>{date}</div>
-          </div>
-          <div className={styles.column}>
-            <div>В пути</div>
-            <div>{duration}</div>
-          </div>
-          <div className={styles.column}>
-            <div>3 ПЕРЕСАДКИ</div>
-            <div>{stops}</div>
-          </div> */}
+          )
+        )}
       </div>
     </div>
   );

@@ -4,6 +4,7 @@
 
   max-width: 960px;
   padding: 0 103px;
+  margin: 0 auto;
 
   .page {
     display: grid;
@@ -17,6 +18,9 @@
   }
 
   .ticketsList {
+    display: grid;
+    gap: 20px;
+
     list-style: none;
   }
 }
