@@ -6,96 +6,48 @@ import Sort from "./components/Sort";
 import Button from "./components/Button";
 import Ticket from "./components/Ticket";
 import { PropsTicket } from "./components/Ticket";
-
-const CURRENT_COUNT: number = 5;
-
-const sortCheapest = (arr: PropsTicket[]) => {
-  for (let i = 0; i < arr.length - 1; i++) {
-    let min = i;
-    for (let j = i + 1; j < arr.length; j++) {
-      if (arr[min].price > arr[j].price) {
-        min = j;
-      }
-    }
-    if (min !== i) {
-      let k = arr[min];
-      arr[min] = arr[i];
-      arr[i] = k;
-    }
-  }
-  return arr;
-};
+import {
+  getTicketList,
+  sortByPrice,
+  sortByDuration,
+  sortByOptimal,
+  getTicketsRange,
+  filterByCountStops,
+} from "./service/tickets-storage";
 
 const App = () => {
   const [tickets, setTickets] = useState<PropsTicket[]>([]);
-  const [currentTickets, setCurrentTickets] = useState<PropsTicket[]>([]);
-
-  const getCurrentTickets = () => {
-    let beginIndex = currentTickets.length;
-    let endIndex = beginIndex + CURRENT_COUNT;
-    let moreTickets = tickets.slice(beginIndex, endIndex);
-    setCurrentTickets([...currentTickets, ...moreTickets]);
-  };
-
-  const showMoreTickets = () => {
-    getCurrentTickets();
-  };
 
   useEffect(() => {
-    fetch("https://front-test.beta.aviasales.ru/search")
-      .then((response) => response.json())
-      .then(({ searchId }) => {
-        fetch(
-          `https://front-test.beta.aviasales.ru/tickets?searchId=${searchId}`
-        )
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.tickets) {
-              setTickets(data.tickets);
-              let sortCurrentTickets = sortCheapest(
-                data.tickets.slice(0, CURRENT_COUNT)
-              );
-              setCurrentTickets(sortCurrentTickets);
-            }
-          })
-          .catch((err) => {
-            console.log("Error get tickets");
-          });
-      })
-      .catch((err) => {
-        console.log("Error get searchId");
-      });
+    getTicketList().then((tickets) => {
+      setTickets(tickets);
+    });
   }, []);
 
-  const sortFastest = () => {
-    for (let i = 0; i < currentTickets.length - 1; i++) {
-      let min = i;
-      for (let j = i + 1; j < currentTickets.length; j++) {
-        if (
-          currentTickets[min].segments[0].duration >
-          currentTickets[j].segments[0].duration
-        ) {
-          min = j;
-        }
-      }
-      if (min !== i) {
-        let k = currentTickets[min];
-        currentTickets[min] = currentTickets[i];
-        currentTickets[i] = k;
-      }
-    }
-    return setCurrentTickets([...currentTickets]);
+  const showMoreTickets = () => {
+    let moreTickets = getTicketsRange(tickets.length);
+    setTickets([...tickets, ...moreTickets]);
+  };
+
+  const filterCurrentTickets = (checkeds: number[]) => {
+    let list = filterByCountStops(checkeds);
+    setTickets([...list]);
   };
 
   const sortTickets = (e: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(e.target.value);
-
     if (e.target.value === "fastest") {
-      sortFastest();
+      let fastTikets = sortByDuration();
+      setTickets([...fastTikets]);
     }
+
     if (e.target.value === "cheapest") {
-      let sortCurrentTickets = sortCheapest(currentTickets);
-      setCurrentTickets([...sortCurrentTickets]);
+      let cheapestTikets = sortByPrice();
+      setTickets([...cheapestTikets]);
+    }
+
+    if (e.target.value === "optimal") {
+      let optimalTikets = sortByOptimal();
+      setTickets([...optimalTikets]);
     }
   };
 
@@ -106,12 +58,12 @@ const App = () => {
       </div>
       <div className={styles.page}>
         <div className={styles.sidebar}>
-          <Filter />
+          <Filter onChange={filterCurrentTickets} />
         </div>
         <div className={styles.main}>
           <Sort onChange={sortTickets} />
           <ul className={styles.ticketsList}>
-            {currentTickets.map((ticket, index) => (
+            {tickets.map((ticket, index) => (
               <li className={styles.ticketItem} key={`${ticket.price}${index}`}>
                 <Ticket {...ticket} />
               </li>
